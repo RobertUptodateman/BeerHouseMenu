@@ -23,22 +23,46 @@ collections:
     editor:
       preview: false
     files:
-      - name: beers
-        label: Позиции пива
+      - name: taps
+        label: Краны
         file: data/menu.json
         format: json
         fields:
-          - name: beers
-            label: Позиции
+          - name: core
+            label: Базовые краны
+            hint: "Номер крана = порядок в списке: сверху вниз по базовым, затем продолжается в гостевых. Перетаскивайте позиции, чтобы сменить кран."
             label_singular: позицию
             widget: list
             collapsed: true
-            summary: "{{fields.name}} · {{fields.style}} · {{fields.price}} ₽"
-            fields:
+            summary: "{{fields.name}} · {{fields.style}} · {{fields.price}} ₾"
+            # Набор полей позиции, общий для базовых и гостевых кранов
+            fields: &beer_fields
               - { name: name, label: Название, widget: string }
-              - { name: style, label: Стиль, widget: string, required: false }
-              - { name: abv, label: "Крепость, %", widget: number, value_type: float, min: 0, step: 0.1 }
+              - { name: style, label: "Стиль (на английском)", widget: string, required: false }
+              - { name: abv, label: "ABV, %", widget: number, value_type: float, min: 0, step: 0.1 }
               - { name: ibu, label: IBU, widget: number, value_type: int, min: 0, required: false }
-              - { name: volume, label: Объём, widget: string, default: "0.5 л" }
-              - { name: price, label: "Цена, ₽", widget: number, value_type: int, min: 0 }
+              - name: color
+                label: Цвет пива (маркер)
+                widget: select
+                default: light
+                options:
+                  - { label: "Светлое", value: light }
+                  - { label: "Янтарное / красное", value: amber }
+                  - { label: "Тёмное", value: dark }
+                  - { label: "Фруктовое / кислое", value: fruit }
+              - name: glass
+                label: Бокал
+                widget: select
+                default: "0.45"
+                options:
+                  - { label: "0,45 (стандартный)", value: "0.45" }
+                  - { label: "0,33", value: "0.33" }
+              - { name: price, label: "Цена, ₾", widget: number, value_type: float, min: 0, step: 0.5 }
               - { name: available, label: В наличии, widget: boolean, default: true }
+          - name: guest
+            label: Гостевые краны
+            label_singular: позицию
+            widget: list
+            collapsed: true
+            summary: "{{fields.name}} · {{fields.style}} · {{fields.price}} ₾"
+            fields: *beer_fields

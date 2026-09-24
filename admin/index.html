@@ -5,6 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Beer House — админка</title>
+  <style>
+    /* Номер крана у каждой позиции: сквозной счётчик по базовым, затем гостевым.
+       Селекторы опираются на метки в классах Decap (SortableListItem, TopBar) */
+    [class*="ControlPaneContainer"] {
+      counter-reset: tap;
+    }
+
+    [class*="SortableListItem"] {
+      counter-increment: tap;
+    }
+
+    [class*="SortableListItem"] > [class*="TopBar"] {
+      position: relative;
+    }
+
+    [class*="SortableListItem"] > [class*="TopBar"]::after {
+      content: "Кран " counter(tap);
+      position: absolute;
+      top: 50%;
+      left: 40px;
+      transform: translateY(-50%);
+      font-size: 13px;
+      font-weight: 600;
+      color: #3a3a3a;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>

@@ -4,15 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Beer House — меню</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Только знак лари: в Roboto Condensed и шрифтах телевизоров его может не быть -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@500&text=%E2%82%BE&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #12100d;
-      --text: #f3ead8;
-      --muted: #9c907c;
-      --accent: #e0a526;
-      --line: rgba(243, 234, 216, 0.1);
-      --danger: #d0664a;
-      /* Базовый размер шрифта меню, подбирается скриптом под экран и число позиций */
+      /* Палитра по логотипу: зелёный хмеля и неоново-жёлтый на светлом фоне */
+      --bg: #f7f7ec;
+      --text: #14231c;
+      --muted: #6b776f;
+      --accent: #18634a;
+      --highlight: #e8ec94;
+      --line: rgba(20, 35, 28, 0.12);
+      --danger: #b3261e;
+
+      /* Маркеры цвета пива */
+      --beer-light: #e8b43a;
+      --beer-amber: #b5532a;
+      --beer-dark: #3b2418;
+      --beer-fruit: #c2185b;
+
+      /* Размер названий; остальное задаётся долями от него. Подбирается скриптом */
       --fs: 20px;
       /* Добавка к отступу строк, чтобы список занимал всю высоту экрана */
       --extra: 0px;
@@ -31,44 +45,20 @@
 
     body {
       display: flex;
-      flex-direction: column;
-      padding: 1.6vh 2vw 1.2vh;
+      padding: 2.2vh 2.4vw;
       background: var(--bg);
       color: var(--text);
       font-family: "Roboto Condensed", "Arial Narrow", "Segoe UI", system-ui, sans-serif;
     }
 
-    .top {
-      flex: none;
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 2vw;
-      margin-bottom: 1vh;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 3.2vh;
-      font-weight: 400;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    .status {
-      font-size: 1.6vh;
-      color: var(--danger);
-    }
-
     .board {
       flex: 1 1 auto;
-      min-height: 0;
+      min-width: 0;
       display: flex;
-      gap: calc(var(--fs) * 2.2);
+      gap: calc(var(--fs) * 2);
       overflow: hidden;
       font-size: var(--fs);
-      line-height: 1.2;
+      line-height: 1.15;
     }
 
     .col {
@@ -80,8 +70,8 @@
     .row {
       display: flex;
       align-items: baseline;
-      gap: calc(var(--fs) * 0.6);
-      padding: calc(var(--fs) * 0.2 + var(--extra)) 0;
+      gap: calc(var(--fs) * 0.4);
+      padding: calc(var(--fs) * 0.18 + var(--extra)) 0;
       border-bottom: 1px solid var(--line);
     }
 
@@ -92,10 +82,44 @@
     .head {
       padding-top: 0;
       color: var(--muted);
-      font-size: calc(var(--fs) * 0.55);
+      font-size: calc(var(--fs) * 0.5);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+
+    .head .name span {
+      padding: 0.15em 0.6em;
+      border-radius: 0.3em;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--highlight);
+    }
+
+    .tap {
+      flex: none;
+      width: calc(var(--fs) * 1.1);
+      text-align: right;
+      font-size: calc(var(--fs) * 0.55);
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+    }
+
+    .dot {
+      flex: none;
+      align-self: center;
+      width: calc(var(--fs) * 0.42);
+      height: calc(var(--fs) * 0.42);
+      border-radius: 50%;
+    }
+
+    .head .dot {
+      visibility: hidden;
+    }
+
+    .dot.light { background: var(--beer-light); }
+    .dot.amber { background: var(--beer-amber); }
+    .dot.dark { background: var(--beer-dark); }
+    .dot.fruit { background: var(--beer-fruit); }
 
     .name {
       flex: 1 1 auto;
@@ -106,13 +130,13 @@
     }
 
     .name b {
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .name i {
       margin-left: 0.5em;
       font-style: normal;
-      font-size: 0.72em;
+      font-size: 0.6em;
       color: var(--muted);
     }
 
@@ -136,21 +160,30 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* Ширины в единицах --fs, чтобы заголовок с мелким шрифтом совпадал со строками */
-    .abv { width: calc(var(--fs) * 2.8); }
-    .ibu { width: calc(var(--fs) * 1.9); }
-    .vol { width: calc(var(--fs) * 3.3); }
-    .price { width: calc(var(--fs) * 2.6); }
+    /* Ширины в единицах --fs, чтобы мелкий заголовок совпадал со строками */
+    .abv { width: calc(var(--fs) * 1.9); }
+    .ibu { width: calc(var(--fs) * 1.3); }
+    .vol { width: calc(var(--fs) * 1.5); }
+    .price { width: calc(var(--fs) * 2.3); }
 
     .row:not(.head) .abv,
     .row:not(.head) .ibu,
     .row:not(.head) .vol {
+      font-size: calc(var(--fs) * 0.58);
       color: var(--muted);
     }
 
     .row:not(.head) .price {
-      font-weight: 600;
+      font-size: calc(var(--fs) * 0.9);
+      font-weight: 700;
       color: var(--accent);
+    }
+
+    .cur {
+      margin-left: 0.12em;
+      font-family: "Noto Sans Georgian", "Segoe UI", system-ui, sans-serif;
+      font-size: 0.75em;
+      font-weight: 500;
     }
 
     .off {
@@ -159,6 +192,14 @@
 
     .off .price {
       text-decoration: line-through;
+    }
+
+    .status {
+      position: fixed;
+      right: 1vw;
+      bottom: 0.6vh;
+      font-size: 1.4vh;
+      color: var(--danger);
     }
 
     .empty {
@@ -178,13 +219,8 @@
   </style>
 </head>
 <body>
-  <header class="top">
-    <h1>Beer House</h1>
-    <span id="status" class="status" aria-live="polite"></span>
-  </header>
-
   <main id="board" class="board"></main>
-
+  <span id="status" class="status" aria-live="polite"></span>
   <p id="empty" class="empty">Загрузка меню…</p>
 
   <script>
@@ -192,19 +228,15 @@
     const POLL_MS = 45000;
     const DATA_URL = "data/menu.json";
     const MIN_FS = 8;
-    const MAX_FS = 160;
-    const MAX_COLS = 6;
+    const MAX_FS = 200;
+    const COLORS = ["light", "amber", "dark", "fruit"];
 
     const board = document.getElementById("board");
     const statusEl = document.getElementById("status");
     const emptyEl = document.getElementById("empty");
 
-    let items = [];
+    let menu = { core: [], guest: [] };
     let lastRaw = null;
-
-    function setStatus(text) {
-      statusEl.textContent = text;
-    }
 
     function formatNumber(value) {
       if (value === null || value === undefined || value === "") return "";
@@ -212,10 +244,13 @@
       return Number.isFinite(n) ? n.toLocaleString("ru-RU", { maximumFractionDigits: 1 }) : String(value);
     }
 
-    // Поддержка старого формата с одной позицией, пока Pages не отдал новый JSON
+    // Старые форматы (одна позиция или список beers) показываются как базовые краны
     function normalize(data) {
-      if (data && Array.isArray(data.beers)) return data.beers;
-      if (data && typeof data === "object" && "name" in data) return [data];
+      if (data && (Array.isArray(data.core) || Array.isArray(data.guest))) {
+        return { core: data.core || [], guest: data.guest || [] };
+      }
+      if (data && Array.isArray(data.beers)) return { core: data.beers, guest: [] };
+      if (data && typeof data === "object" && "name" in data) return { core: [data], guest: [] };
       throw new Error("Неверный формат меню");
     }
 
@@ -226,22 +261,30 @@
       return span;
     }
 
-    function headRow() {
+    function headRow(title) {
       const row = document.createElement("div");
       row.className = "row head";
+      const name = document.createElement("span");
+      name.className = "name";
+      name.append(cell("", title));
+
       row.append(
-        cell("name", ""),
-        cell("num abv", "Алк."),
+        cell("tap", ""),
+        cell("dot", ""),
+        name,
+        cell("num abv", "ABV"),
         cell("num ibu", "IBU"),
-        cell("num vol", "Объём"),
-        cell("num price", "₽")
+        cell("num vol", ""),
+        cell("num price", "")
       );
       return row;
     }
 
-    function beerRow(beer) {
+    function beerRow(beer, tap) {
       const row = document.createElement("div");
       row.className = beer.available === false ? "row off" : "row";
+
+      const color = COLORS.includes(beer.color) ? beer.color : "light";
 
       const name = document.createElement("span");
       name.className = "name";
@@ -255,27 +298,36 @@
       }
 
       const abv = formatNumber(beer.abv);
+      const price = formatNumber(beer.price);
+      // Объём показываем только для нестандартного бокала 0,33
+      const vol = String(beer.glass || beer.volume || "").startsWith("0.33") ? "0,33" : "";
+
+      const priceCell = cell("num price", price);
+      if (price) priceCell.append(cell("cur", "₾"));
+
       row.append(
+        cell("tap", String(tap)),
+        cell("dot " + color, ""),
         name,
         cell("num abv", abv ? abv + "%" : ""),
         cell("num ibu", Number(beer.ibu) > 0 ? formatNumber(beer.ibu) : "—"),
-        cell("num vol", beer.volume || ""),
-        cell("num price", formatNumber(beer.price))
+        cell("num vol", vol),
+        priceCell
       );
       return row;
     }
 
-    function build(cols) {
-      const perCol = Math.ceil(items.length / cols);
-      board.replaceChildren();
-      for (let c = 0; c < cols; c++) {
-        const part = items.slice(c * perCol, (c + 1) * perCol);
-        if (!part.length) break;
-        const col = document.createElement("div");
-        col.className = "col";
-        col.append(headRow(), ...part.map(beerRow));
-        board.append(col);
-      }
+    // Номера кранов: сверху вниз по базовым, затем продолжаются в гостевых
+    function build() {
+      const core = document.createElement("div");
+      core.className = "col";
+      core.append(headRow("Core"), ...menu.core.map((b, i) => beerRow(b, i + 1)));
+
+      const guest = document.createElement("div");
+      guest.className = "col";
+      guest.append(headRow("Guest"), ...menu.guest.map((b, i) => beerRow(b, menu.core.length + i + 1)));
+
+      board.replaceChildren(core, guest);
     }
 
     function fits(fs) {
@@ -317,32 +369,22 @@
       board.style.setProperty("--extra", Math.floor(extra * 10) / 10 + "px");
     }
 
-    // Перебор раскладки и числа колонок, для каждой — максимальный шрифт, при котором всё помещается
+    // Две раскладки строки; для каждой — максимальный шрифт, при котором всё помещается
     function fit() {
-      if (!items.length) return;
+      if (!menu.core.length && !menu.guest.length) return;
 
       board.style.setProperty("--extra", "0px");
+      build();
       let best = null;
       for (const stack of [false, true]) {
         board.classList.toggle("stack", stack);
-        let prevPerCol = 0;
-        for (let cols = 1; cols <= Math.min(MAX_COLS, items.length); cols++) {
-          const perCol = Math.ceil(items.length / cols);
-          if (perCol === prevPerCol) continue;
-          prevPerCol = perCol;
-
-          build(cols);
-          const fs = maxFontSize();
-          if (fs && (!best || fs > best.fs)) best = { stack, cols, fs };
-        }
+        const fs = maxFontSize();
+        if (fs && (!best || fs > best.fs)) best = { stack, fs };
       }
-
-      // Если не влезло даже минимальным шрифтом, максимум колонок и обрезка названий
-      if (!best) best = { stack: true, cols: Math.min(MAX_COLS, items.length), fs: MIN_FS };
+      if (!best) best = { stack: true, fs: MIN_FS };
 
       const fs = Math.floor(best.fs * 4) / 4;
       board.classList.toggle("stack", best.stack);
-      build(best.cols);
       board.style.setProperty("--fs", fs + "px");
       spreadRows(fs);
     }
@@ -354,16 +396,20 @@
 
         const raw = await response.text();
         if (raw !== lastRaw) {
-          items = normalize(JSON.parse(raw));
+          menu = normalize(JSON.parse(raw));
           lastRaw = raw;
-          emptyEl.hidden = items.length > 0;
-          if (!items.length) emptyEl.textContent = "Меню пока пусто.";
+          const isEmpty = !menu.core.length && !menu.guest.length;
+          emptyEl.hidden = !isEmpty;
+          if (isEmpty) {
+            emptyEl.textContent = "Меню пока пусто.";
+            board.replaceChildren();
+          }
           fit();
         }
-        setStatus("");
+        statusEl.textContent = "";
       } catch (error) {
         if (lastRaw) {
-          setStatus("Не удалось обновить меню");
+          statusEl.textContent = "Не удалось обновить меню";
         } else {
           emptyEl.hidden = false;
           emptyEl.textContent = "Меню временно недоступно.";
