@@ -4,7 +4,7 @@
       "color": "light",
       "badge": "new",
       "price": 16,
-      "available": true,
+      "available": false,
       "brewery": "Big Village",
       "name": "СОПРОТИВЛЕНИЕ",
       "style": "Triple IPA",
