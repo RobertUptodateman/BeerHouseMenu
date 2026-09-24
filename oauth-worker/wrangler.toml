@@ -1,0 +1,7 @@
+name = "bh-menu-oauth"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+[vars]
+# Origin сайта без пути: для https://robertuptodateman.github.io/BeerHouseMenu/ это только схема и домен
+ALLOWED_ORIGIN = "https://robertuptodateman.github.io"

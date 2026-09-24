@@ -2,8 +2,8 @@ backend:
   name: github
   repo: RobertUptodateman/BeerHouseMenu
   branch: master
-  # URL Cloudflare Worker для OAuth, без завершающего "/". Заполняется на шаге 3.
-  # base_url: https://<worker>.workers.dev
+  # URL Cloudflare Worker для OAuth, без завершающего "/"
+  base_url: https://bh-menu-oauth.beerhouse.workers.dev
   commit_messages:
     update: "Обновление меню: {{slug}}"
 

@@ -91,10 +91,13 @@
   data/menu.json       # одна позиция пива
   admin/index.html     # оболочка Decap CMS
   admin/config.yml     # бэкенд GitHub + поля
+  oauth-worker/        # OAuth-прокси на Cloudflare Worker
+    wrangler.toml
+    src/index.js
   README.md
 ```
 
-Worker OAuth **не публиковать** как часть Pages. Предпочтительный вариант — отдельный репозиторий (секреты и деплой изолированы). Альтернатива — папка `oauth-worker/` и публикация Pages только из корня сайта через Actions; для каркаса это лишняя сложность.
+Код Worker лежит в этом же репозитории и попадает на Pages как статические файлы. Это безопасно: в коде нет секретов, `Client ID` и `Client Secret` задаются только в Cloudflare через `wrangler secret put`.
 
 ## Локальный запуск
 
@@ -129,14 +132,33 @@ Worker OAuth **не публиковать** как часть Pages. Предп
 
 ### 3. GitHub OAuth и Cloudflare Worker
 
-1. GitHub → **OAuth App** (не GitHub App):
-   - Homepage URL — URL GitHub Pages;
-   - Authorization callback URL — `https://<worker>.workers.dev/callback`.
-2. Worker:
-   - `GET /auth` — редирект на GitHub;
-   - `GET /callback` — обмен `code` на `access_token`, передача токена в окно CMS;
-   - CORS для origin сайта на Pages.
-3. Секреты Worker: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, при необходимости разрешённый origin сайта.
+Worker (`oauth-worker/src/index.js`):
+
+- `GET /auth` — ставит cookie со случайным `state` и редиректит на GitHub;
+- `GET /callback` — сверяет `state`, обменивает `code` на `access_token` и отдаёт popup-страницу, которая передаёт токен окну CMS через `postMessage`;
+- токен уходит только окну с origin из `ALLOWED_ORIGIN` (`wrangler.toml`), поэтому CORS не нужен.
+
+Порядок настройки:
+
+1. Задеплоить Worker, чтобы узнать его URL (в папке `oauth-worker/`):
+
+   ```bash
+   npx wrangler login
+   npx wrangler deploy
+   ```
+
+   Получится адрес вида `https://bh-menu-oauth.<аккаунт>.workers.dev`.
+2. GitHub → Settings → Developer settings → **OAuth Apps** → New (не GitHub App):
+   - Homepage URL — `https://robertuptodateman.github.io/BeerHouseMenu/`;
+   - Authorization callback URL — `https://bh-menu-oauth.<аккаунт>.workers.dev/callback`.
+3. Сгенерировать Client Secret и сохранить оба значения в Worker:
+
+   ```bash
+   npx wrangler secret put GITHUB_CLIENT_ID
+   npx wrangler secret put GITHUB_CLIENT_SECRET
+   ```
+
+4. В `admin/config.yml` раскомментировать `base_url` и вписать URL Worker без завершающего `/`.
 
 Доступ в админку = GitHub-аккаунт, который может войти через это OAuth App и имеет push в репозиторий.
 
@@ -160,7 +182,7 @@ Worker OAuth **не публиковать** как часть Pages. Предп
 - **Subpath репозитория.** Неверный базовый URL ломает `/admin/` и `fetch`.
 - **Формат JSON.** Decap `files` пишет объект верхнего уровня; публичный JS не должен ждать массив.
 - **Права токена.** У OAuth App должен быть доступ к репозиторию.
-- **CORS / origin Worker.** Если origin не совпадает с URL Pages, токен не вернётся в CMS.
+- **Origin Worker.** Если `ALLOWED_ORIGIN` не совпадает с origin сайта (схема + домен без пути), popup не передаст токен и вход зависнет.
 - **Задержка CDN.** После Save обновление на сайте не мгновенное; опрос 30–60 с это компенсирует.
 
 Много карточек лучше вводить после зелёных критериев первого этапа: JSON расширяется до `{ "beers": [ ... ] }`, коллекция Decap меняется на список, OAuth и Pages остаются теми же.
