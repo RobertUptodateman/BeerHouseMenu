@@ -1,0 +1,35 @@
+backend:
+  name: github
+  repo: RobertUptodateman/BeerHouseMenu
+  branch: master
+  # URL Cloudflare Worker для OAuth, без завершающего "/". Заполняется на шаге 3.
+  # base_url: https://<worker>.workers.dev
+  commit_messages:
+    update: "Обновление меню: {{slug}}"
+
+# Работает только на localhost с запущенным `npx decap-server`, на Pages игнорируется
+local_backend: true
+
+locale: ru
+
+# Обязательное поле Decap; загрузка картинок пока не используется
+media_folder: assets/uploads
+public_folder: /assets/uploads
+
+collections:
+  - name: menu
+    label: Меню
+    delete: false
+    files:
+      - name: beer
+        label: Позиция пива
+        file: data/menu.json
+        format: json
+        fields:
+          - { name: name, label: Название, widget: string }
+          - { name: style, label: Стиль, widget: string }
+          - { name: abv, label: "Крепость, %", widget: number, value_type: float, min: 0, step: 0.1 }
+          - { name: ibu, label: IBU, widget: number, value_type: int, min: 0 }
+          - { name: volume, label: Объём, widget: string }
+          - { name: price, label: "Цена, ₽", widget: number, value_type: int, min: 0 }
+          - { name: available, label: В наличии, widget: boolean, default: true }
