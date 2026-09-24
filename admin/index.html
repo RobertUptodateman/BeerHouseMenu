@@ -6,22 +6,14 @@
   <meta name="robots" content="noindex">
   <title>Beer House — админка</title>
   <style>
-    /* Номер крана у каждой позиции: сквозной счётчик по базовым, затем гостевым.
+    /* Номер крана у каждой позиции ставит скрипт ниже.
        Селекторы опираются на метки в классах Decap (SortableListItem, TopBar) */
-    [class*="ControlPaneContainer"] {
-      counter-reset: tap;
-    }
-
-    [class*="SortableListItem"] {
-      counter-increment: tap;
-    }
-
-    [class*="SortableListItem"] > [class*="TopBar"] {
+    [data-tap] {
       position: relative;
     }
 
-    [class*="SortableListItem"] > [class*="TopBar"]::after {
-      content: "Кран " counter(tap);
+    [data-tap]::after {
+      content: "Кран " attr(data-tap);
       position: absolute;
       top: 50%;
       left: 40px;
@@ -31,9 +23,48 @@
       color: #3a3a3a;
       pointer-events: none;
     }
+
+    [data-divider] [class*="NestedObjectLabel"] {
+      background: #e8ec94;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-align: center;
+      color: #18634a;
+    }
   </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // Должен совпадать с summary разделителя в config.yml
+    const DIVIDER_TEXT = "ГОСТЕВЫЕ КРАНЫ";
+
+    function numberTaps() {
+      let tap = 0;
+      for (const item of document.querySelectorAll('[class*="SortableListItem"]')) {
+        const bar = item.querySelector(':scope > [class*="TopBar"]');
+        if (!bar) continue;
+        if (item.textContent.includes(DIVIDER_TEXT)) {
+          bar.removeAttribute("data-tap");
+          item.setAttribute("data-divider", "");
+          continue;
+        }
+        item.removeAttribute("data-divider");
+        tap += 1;
+        if (bar.getAttribute("data-tap") !== String(tap)) bar.setAttribute("data-tap", tap);
+      }
+    }
+
+    // Decap перерисовывает список при перетаскивании и правках — пересчитываем после каждого изменения
+    let scheduled = false;
+    new MutationObserver(() => {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        scheduled = false;
+        numberTaps();
+      });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  </script>
 </body>
 </html>

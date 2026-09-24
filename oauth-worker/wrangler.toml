@@ -5,3 +5,6 @@ compatibility_date = "2025-09-01"
 [vars]
 # Origin сайта без пути: для https://robertuptodateman.github.io/BeerHouseMenu/ это только схема и домен
 ALLOWED_ORIGIN = "https://robertuptodateman.github.io"
+MENU_REPO = "RobertUptodateman/BeerHouseMenu"
+MENU_BRANCH = "master"
+MENU_PATH = "data/menu.json"

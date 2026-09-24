@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
   <!-- Только знак лари: в Roboto Condensed и шрифтах телевизоров его может не быть -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@500&text=%E2%82%BE&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400&text=%E2%82%BE&display=swap" rel="stylesheet">
   <style>
     :root {
       /* Палитра по логотипу: зелёный хмеля и неоново-жёлтый на светлом фоне */
@@ -19,12 +19,15 @@
       --highlight: #e8ec94;
       --line: rgba(20, 35, 28, 0.12);
       --danger: #b3261e;
+      --brewery: #45534b;
+      --price: #0b4f3a;
 
       /* Маркеры цвета пива */
-      --beer-light: #e8b43a;
-      --beer-amber: #b5532a;
-      --beer-dark: #3b2418;
-      --beer-fruit: #c2185b;
+      --beer-light: #f5c400;
+      --beer-amber: #c8421b;
+      --beer-dark: #4a2a17;
+      --beer-fruit: #d81b60;
+      --beer-veg: #5e8c1e;
 
       /* Размер названий; остальное задаётся долями от него. Подбирается скриптом */
       --fs: 20px;
@@ -68,10 +71,11 @@
     }
 
     .row {
+      --pad: calc(var(--fs) * 0.18 + var(--extra));
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: calc(var(--fs) * 0.4);
-      padding: calc(var(--fs) * 0.18 + var(--extra)) 0;
+      padding: var(--pad) 0;
       border-bottom: 1px solid var(--line);
     }
 
@@ -82,7 +86,7 @@
     .head {
       padding-top: 0;
       color: var(--muted);
-      font-size: calc(var(--fs) * 0.5);
+      font-size: calc(var(--fs) * 0.55);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
@@ -99,27 +103,61 @@
       flex: none;
       width: calc(var(--fs) * 1.1);
       text-align: right;
-      font-size: calc(var(--fs) * 0.55);
+    }
+
+    /* Номер крана оформлен так же, как ABV */
+    .row:not(.head) .tap {
+      font-size: calc(var(--fs) * 0.8);
       font-variant-numeric: tabular-nums;
       color: var(--muted);
     }
 
-    .dot {
+    /* Ячейка маркера одной ширины для кружков и шильдиков, чтобы названия шли ровно.
+       Отрицательные отступы растягивают её на всю высоту строки, не увеличивая строку */
+    .mark {
       flex: none;
-      align-self: center;
-      width: calc(var(--fs) * 0.42);
-      height: calc(var(--fs) * 0.42);
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: calc(var(--fs) * 0.9);
+      margin: calc(3px - var(--pad)) 0;
+    }
+
+    .dot {
+      width: calc(var(--fs) * 0.9);
+      height: calc(var(--fs) * 0.9);
       border-radius: 50%;
     }
 
-    .head .dot {
-      visibility: hidden;
+    .dot.light {
+      background: var(--beer-light);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
     }
 
-    .dot.light { background: var(--beer-light); }
     .dot.amber { background: var(--beer-amber); }
     .dot.dark { background: var(--beer-dark); }
-    .dot.fruit { background: var(--beer-fruit); }
+
+    /* Шильдик с вертикальной надписью, читается снизу вверх */
+    .tag {
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: calc(var(--fs) * 0.7);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      padding: 0.2em 0;
+      border-radius: 0.25em;
+      font-size: calc(var(--fs) * 0.44);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      color: #fff;
+    }
+
+    .tag.fruit { background: var(--beer-fruit); }
+    .tag.veg { background: var(--beer-veg); }
 
     .name {
       flex: 1 1 auto;
@@ -129,6 +167,21 @@
       text-overflow: ellipsis;
     }
 
+    /* Иерархия: сорт крупнее всего; пивоварня жирная, чуть меньше и светлее; стиль того же размера, но обычный */
+    .name em {
+      font-style: normal;
+      font-weight: 700;
+      font-size: 0.86em;
+      color: var(--brewery);
+    }
+
+    .name em::after {
+      content: "/";
+      margin: 0 0.3em;
+      font-weight: 400;
+      color: rgba(20, 35, 28, 0.3);
+    }
+
     .name b {
       font-weight: 700;
     }
@@ -136,12 +189,29 @@
     .name i {
       margin-left: 0.5em;
       font-style: normal;
-      font-size: 0.6em;
+      font-size: 0.86em;
       color: var(--muted);
     }
 
+    /* Метка сорта рядом с названием */
+    .badge {
+      display: inline-block;
+      margin-left: 0.45em;
+      padding: 0.18em 0.4em;
+      border-radius: 0.3em;
+      vertical-align: 0.2em;
+      font-size: 0.52em;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: #fff;
+    }
+
+    .badge.new { background: var(--danger); }
+    .badge.last { background: #e07b00; }
+
     /* Раскладка «стиль под названием»: уже по ширине, выше по высоте */
-    .stack .name b,
+    .stack .name .line,
     .stack .name i {
       display: block;
       overflow: hidden;
@@ -161,29 +231,27 @@
     }
 
     /* Ширины в единицах --fs, чтобы мелкий заголовок совпадал со строками */
-    .abv { width: calc(var(--fs) * 1.9); }
-    .ibu { width: calc(var(--fs) * 1.3); }
-    .vol { width: calc(var(--fs) * 1.5); }
+    .abv { width: calc(var(--fs) * 2.5); }
+    .ibu { width: calc(var(--fs) * 1.7); }
+    .vol { width: calc(var(--fs) * 1.6); }
     .price { width: calc(var(--fs) * 2.3); }
 
-    .row:not(.head) .abv,
-    .row:not(.head) .ibu,
-    .row:not(.head) .vol {
-      font-size: calc(var(--fs) * 0.58);
+    /* Все цифры одного размера; у цены жирная только сама сумма */
+    .row:not(.head) .num {
+      font-size: calc(var(--fs) * 0.8);
       color: var(--muted);
     }
 
     .row:not(.head) .price {
-      font-size: calc(var(--fs) * 0.9);
       font-weight: 700;
-      color: var(--accent);
+      color: var(--price);
     }
 
     .cur {
       margin-left: 0.12em;
+      padding-right: 0.08em;
       font-family: "Noto Sans Georgian", "Segoe UI", system-ui, sans-serif;
-      font-size: 0.75em;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     .off {
@@ -224,12 +292,18 @@
   <p id="empty" class="empty">Загрузка меню…</p>
 
   <script>
-    // Опрос JSON каждые 45 секунд, без кэша Pages/браузера
-    const POLL_MS = 45000;
+    const POLL_MS = 15000;
+    // Сначала Worker: отдаёт JSON прямо из репозитория, без ожидания сборки Pages.
+    // Если он недоступен — файл с Pages. Локально — только локальный файл
+    const WORKER_URL = "https://bh-menu-oauth.beerhouse.workers.dev/menu";
     const DATA_URL = "data/menu.json";
+    const IS_LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
+    const SOURCES = IS_LOCAL ? [DATA_URL] : [WORKER_URL, DATA_URL];
     const MIN_FS = 8;
     const MAX_FS = 200;
-    const COLORS = ["light", "amber", "dark", "fruit"];
+    const DOTS = ["light", "amber", "dark"];
+    const TAGS = { fruit: "FRUIT", veg: "VEG" };
+    const BADGES = { new: "NEW", last: "LAST KEG" };
 
     const board = document.getElementById("board");
     const statusEl = document.getElementById("status");
@@ -244,8 +318,18 @@
       return Number.isFinite(n) ? n.toLocaleString("ru-RU", { maximumFractionDigits: 1 }) : String(value);
     }
 
-    // Старые форматы (одна позиция или список beers) показываются как базовые краны
+    // Основной формат — общий список taps с разделителем: выше — базовые краны, ниже — гостевые.
+    // Старые форматы (core/guest, beers, одна позиция) тоже поддерживаются
     function normalize(data) {
+      if (data && Array.isArray(data.taps)) {
+        const split = data.taps.findIndex((item) => item && item.type === "divider");
+        const isBeer = (item) => item && item.type !== "divider";
+        if (split < 0) return { core: data.taps.filter(isBeer), guest: [] };
+        return {
+          core: data.taps.slice(0, split).filter(isBeer),
+          guest: data.taps.slice(split + 1).filter(isBeer)
+        };
+      }
       if (data && (Array.isArray(data.core) || Array.isArray(data.guest))) {
         return { core: data.core || [], guest: data.guest || [] };
       }
@@ -270,7 +354,7 @@
 
       row.append(
         cell("tap", ""),
-        cell("dot", ""),
+        cell("mark", ""),
         name,
         cell("num abv", "ABV"),
         cell("num ibu", "IBU"),
@@ -284,13 +368,27 @@
       const row = document.createElement("div");
       row.className = beer.available === false ? "row off" : "row";
 
-      const color = COLORS.includes(beer.color) ? beer.color : "light";
+      const mark = cell("mark", "");
+      if (TAGS[beer.color]) {
+        mark.append(cell("tag " + beer.color, TAGS[beer.color]));
+      } else {
+        mark.append(cell("dot " + (DOTS.includes(beer.color) ? beer.color : "light"), ""));
+      }
 
       const name = document.createElement("span");
       name.className = "name";
+      const line = document.createElement("span");
+      line.className = "line";
+      if (beer.brewery) {
+        const brewery = document.createElement("em");
+        brewery.textContent = beer.brewery;
+        line.append(brewery);
+      }
       const title = document.createElement("b");
       title.textContent = beer.name || "";
-      name.append(title);
+      line.append(title);
+      if (BADGES[beer.badge]) line.append(cell("badge " + beer.badge, BADGES[beer.badge]));
+      name.append(line);
       if (beer.style) {
         const style = document.createElement("i");
         style.textContent = beer.style;
@@ -299,15 +397,14 @@
 
       const abv = formatNumber(beer.abv);
       const price = formatNumber(beer.price);
-      // Объём показываем только для нестандартного бокала 0,33
-      const vol = String(beer.glass || beer.volume || "").startsWith("0.33") ? "0,33" : "";
+      const vol = String(beer.glass || beer.volume || "").startsWith("0.33") ? "0,33" : "0,45";
 
       const priceCell = cell("num price", price);
       if (price) priceCell.append(cell("cur", "₾"));
 
       row.append(
         cell("tap", String(tap)),
-        cell("dot " + color, ""),
+        mark,
         name,
         cell("num abv", abv ? abv + "%" : ""),
         cell("num ibu", Number(beer.ibu) > 0 ? formatNumber(beer.ibu) : "—"),
@@ -321,11 +418,11 @@
     function build() {
       const core = document.createElement("div");
       core.className = "col";
-      core.append(headRow("Core"), ...menu.core.map((b, i) => beerRow(b, i + 1)));
+      core.append(headRow("Core beer"), ...menu.core.map((b, i) => beerRow(b, i + 1)));
 
       const guest = document.createElement("div");
       guest.className = "col";
-      guest.append(headRow("Guest"), ...menu.guest.map((b, i) => beerRow(b, menu.core.length + i + 1)));
+      guest.append(headRow("Guest beer"), ...menu.guest.map((b, i) => beerRow(b, menu.core.length + i + 1)));
 
       board.replaceChildren(core, guest);
     }
@@ -389,12 +486,21 @@
       spreadRows(fs);
     }
 
+    async function fetchMenuText() {
+      for (const url of SOURCES) {
+        try {
+          const response = await fetch(url + "?t=" + Date.now(), { cache: "no-store" });
+          if (response.ok) return await response.text();
+        } catch (error) {
+          // Источник недоступен — пробуем следующий
+        }
+      }
+      throw new Error("Меню недоступно");
+    }
+
     async function loadMenu() {
       try {
-        const response = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
-        if (!response.ok) throw new Error("HTTP " + response.status);
-
-        const raw = await response.text();
+        const raw = await fetchMenuText();
         if (raw !== lastRaw) {
           menu = normalize(JSON.parse(raw));
           lastRaw = raw;

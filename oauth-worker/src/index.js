@@ -1,9 +1,14 @@
-// OAuth-прокси GitHub для Decap CMS.
-// Секреты: GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET (wrangler secret put).
-// Переменная ALLOWED_ORIGIN — origin сайта с админкой, только ему отдаётся токен.
+// OAuth-прокси GitHub для Decap CMS и быстрая отдача меню из репозитория.
+// Секреты: GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET — OAuth App для админки;
+// MENU_TOKEN — fine-grained токен GitHub с правом Contents: Read-only на репозиторий меню.
+// Переменные: ALLOWED_ORIGIN — origin сайта; MENU_REPO, MENU_BRANCH, MENU_PATH — где лежит JSON.
 
 const STATE_COOKIE = "oauth_state";
 const ALLOWED_SCOPES = new Set(["repo", "public_repo"]);
+// Короткий кэш в памяти, чтобы несколько экранов не множили запросы к GitHub
+const MENU_CACHE_MS = 5000;
+
+let menuCache = { at: 0, body: null };
 
 export default {
   async fetch(request, env) {
@@ -15,9 +20,47 @@ export default {
     if (url.pathname === "/callback") {
       return handleCallback(request, url, env);
     }
+    if (url.pathname === "/menu") {
+      return handleMenu(env);
+    }
     return new Response("Not found", { status: 404 });
   },
 };
+
+// JSON меню прямо из репозитория, без ожидания сборки GitHub Pages
+async function handleMenu(env) {
+  const headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-store",
+    "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN || "*",
+  };
+
+  if (!env.MENU_TOKEN) {
+    return new Response('{"error":"MENU_TOKEN не задан"}', { status: 503, headers });
+  }
+
+  if (menuCache.body && Date.now() - menuCache.at < MENU_CACHE_MS) {
+    return new Response(menuCache.body, { headers });
+  }
+
+  const api = `https://api.github.com/repos/${env.MENU_REPO}/contents/${env.MENU_PATH}?ref=${env.MENU_BRANCH}`;
+  const response = await fetch(api, {
+    headers: {
+      Accept: "application/vnd.github.raw+json",
+      Authorization: `Bearer ${env.MENU_TOKEN}`,
+      "User-Agent": "bh-menu-worker",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+
+  if (!response.ok) {
+    return new Response(JSON.stringify({ error: "GitHub " + response.status }), { status: 502, headers });
+  }
+
+  const body = await response.text();
+  menuCache = { at: Date.now(), body };
+  return new Response(body, { headers });
+}
 
 function handleAuth(url, env) {
   const scope = ALLOWED_SCOPES.has(url.searchParams.get("scope"))
