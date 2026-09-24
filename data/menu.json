@@ -2,7 +2,7 @@
   "taps": [
     {
       "color": "light",
-      "badge": "new",
+      "badge": null,
       "price": 16,
       "available": false,
       "brewery": "Big Village",
