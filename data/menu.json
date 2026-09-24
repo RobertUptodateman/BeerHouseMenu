@@ -1,30 +1,246 @@
 {
   "core": [
-    { "name": "Hazy IPA", "style": "New England IPA", "abv": 6, "ibu": 40, "color": "light", "glass": "0.45", "price": 12, "available": true },
-    { "name": "West Coast", "style": "American IPA", "abv": 6.8, "ibu": 65, "color": "light", "glass": "0.45", "price": 12, "available": true },
-    { "name": "Жигулёвское", "style": "Pale Lager", "abv": 4.5, "ibu": 18, "color": "light", "glass": "0.45", "price": 7, "available": true },
-    { "name": "Pilsner", "style": "Czech Pilsner", "abv": 4.4, "ibu": 40, "color": "light", "glass": "0.45", "price": 9, "available": true },
-    { "name": "Helles", "style": "Munich Helles", "abv": 4.9, "ibu": 20, "color": "light", "glass": "0.45", "price": 9, "available": true },
-    { "name": "Weissbier", "style": "Hefeweizen", "abv": 5.2, "ibu": 12, "color": "light", "glass": "0.45", "price": 10, "available": true },
-    { "name": "Blanche", "style": "Witbier", "abv": 4.8, "ibu": 14, "color": "light", "glass": "0.45", "price": 10, "available": true },
-    { "name": "APA", "style": "American Pale Ale", "abv": 5.4, "ibu": 38, "color": "amber", "glass": "0.45", "price": 11, "available": true },
-    { "name": "Red Ale", "style": "Irish Red Ale", "abv": 5, "ibu": 25, "color": "amber", "glass": "0.45", "price": 10, "available": true },
-    { "name": "Dunkel", "style": "Munich Dunkel", "abv": 5.1, "ibu": 22, "color": "dark", "glass": "0.45", "price": 10, "available": true },
-    { "name": "Irish Stout", "style": "Dry Stout", "abv": 4.2, "ibu": 35, "color": "dark", "glass": "0.45", "price": 11, "available": true },
-    { "name": "Портер", "style": "Baltic Porter", "abv": 7, "ibu": 30, "color": "dark", "glass": "0.45", "price": 12, "available": true }
+    {
+      "name": "Big Village СОПРОТИВЛЕНИЕ",
+      "style": "Triple IPA",
+      "abv": 10,
+      "ibu": 100,
+      "color": "light",
+      "glass": "0.33",
+      "price": 16,
+      "available": true
+    },
+    {
+      "name": "West Coast",
+      "style": "American IPA",
+      "abv": 6.8,
+      "ibu": 65,
+      "color": "light",
+      "glass": "0.45",
+      "price": 12,
+      "available": true
+    },
+    {
+      "name": "Жигулёвское",
+      "style": "Pale Lager",
+      "abv": 4.5,
+      "ibu": 18,
+      "color": "light",
+      "glass": "0.45",
+      "price": 7,
+      "available": true
+    },
+    {
+      "name": "Pilsner",
+      "style": "Czech Pilsner",
+      "abv": 4.4,
+      "ibu": 40,
+      "color": "light",
+      "glass": "0.45",
+      "price": 9,
+      "available": true
+    },
+    {
+      "name": "Helles",
+      "style": "Munich Helles",
+      "abv": 4.9,
+      "ibu": 20,
+      "color": "light",
+      "glass": "0.45",
+      "price": 9,
+      "available": true
+    },
+    {
+      "name": "Weissbier",
+      "style": "Hefeweizen",
+      "abv": 5.2,
+      "ibu": 12,
+      "color": "light",
+      "glass": "0.45",
+      "price": 10,
+      "available": true
+    },
+    {
+      "name": "Blanche",
+      "style": "Witbier",
+      "abv": 4.8,
+      "ibu": 14,
+      "color": "light",
+      "glass": "0.45",
+      "price": 10,
+      "available": true
+    },
+    {
+      "name": "APA",
+      "style": "American Pale Ale",
+      "abv": 5.4,
+      "ibu": 38,
+      "color": "amber",
+      "glass": "0.45",
+      "price": 11,
+      "available": true
+    },
+    {
+      "name": "Red Ale",
+      "style": "Irish Red Ale",
+      "abv": 5,
+      "ibu": 25,
+      "color": "amber",
+      "glass": "0.45",
+      "price": 10,
+      "available": true
+    },
+    {
+      "name": "Dunkel",
+      "style": "Munich Dunkel",
+      "abv": 5.1,
+      "ibu": 22,
+      "color": "dark",
+      "glass": "0.45",
+      "price": 10,
+      "available": true
+    },
+    {
+      "name": "Irish Stout",
+      "style": "Dry Stout",
+      "abv": 4.2,
+      "ibu": 35,
+      "color": "dark",
+      "glass": "0.45",
+      "price": 11,
+      "available": true
+    },
+    {
+      "name": "Портер",
+      "style": "Baltic Porter",
+      "abv": 7,
+      "ibu": 30,
+      "color": "dark",
+      "glass": "0.45",
+      "price": 12,
+      "available": true
+    }
   ],
   "guest": [
-    { "name": "Double Trouble", "style": "Double IPA", "abv": 8.2, "ibu": 80, "color": "light", "glass": "0.33", "price": 14, "available": true },
-    { "name": "Saison", "style": "Farmhouse Ale", "abv": 6.5, "ibu": 28, "color": "light", "glass": "0.45", "price": 13, "available": true },
-    { "name": "Kölsch", "style": "Kölsch", "abv": 4.8, "ibu": 22, "color": "light", "glass": "0.45", "price": 11, "available": true },
-    { "name": "Tripel", "style": "Belgian Tripel", "abv": 9, "ibu": 32, "color": "light", "glass": "0.33", "price": 15, "available": true },
-    { "name": "Dubbel", "style": "Belgian Dubbel", "abv": 7.5, "ibu": 24, "color": "amber", "glass": "0.33", "price": 14, "available": true },
-    { "name": "Rauchbier", "style": "Smoked Märzen", "abv": 5.3, "ibu": 26, "color": "amber", "glass": "0.45", "price": 12, "available": false },
-    { "name": "Imperial Stout", "style": "Russian Imperial Stout", "abv": 10.5, "ibu": 70, "color": "dark", "glass": "0.33", "price": 16, "available": true },
-    { "name": "Kriek", "style": "Cherry Lambic", "abv": 5, "ibu": 10, "color": "fruit", "glass": "0.33", "price": 16, "available": true },
-    { "name": "Mango Sour", "style": "Fruited Sour", "abv": 5.5, "ibu": 10, "color": "fruit", "glass": "0.45", "price": 13, "available": true },
-    { "name": "Gose", "style": "Gose", "abv": 4.3, "ibu": 8, "color": "fruit", "glass": "0.45", "price": 12, "available": true },
-    { "name": "Berliner Weisse", "style": "Raspberry Berliner Weisse", "abv": 3.5, "ibu": 6, "color": "fruit", "glass": "0.45", "price": 12, "available": true },
-    { "name": "Сидр", "style": "Dry Cider", "abv": 5.5, "ibu": 0, "color": "fruit", "glass": "0.45", "price": 11, "available": true }
+    {
+      "name": "Double Trouble",
+      "style": "Double IPA",
+      "abv": 8.2,
+      "ibu": 80,
+      "color": "light",
+      "glass": "0.33",
+      "price": 14,
+      "available": true
+    },
+    {
+      "name": "Saison",
+      "style": "Farmhouse Ale",
+      "abv": 6.5,
+      "ibu": 28,
+      "color": "light",
+      "glass": "0.45",
+      "price": 13,
+      "available": true
+    },
+    {
+      "name": "Big Village ALL CATS ARE CUTE",
+      "style": "NE IPA",
+      "abv": 8,
+      "ibu": 40,
+      "color": "light",
+      "glass": "0.33",
+      "price": 16,
+      "available": true
+    },
+    {
+      "name": "Tripel",
+      "style": "Belgian Tripel",
+      "abv": 9,
+      "ibu": 32,
+      "color": "light",
+      "glass": "0.33",
+      "price": 15,
+      "available": true
+    },
+    {
+      "name": "Dubbel",
+      "style": "Belgian Dubbel",
+      "abv": 7.5,
+      "ibu": 24,
+      "color": "amber",
+      "glass": "0.33",
+      "price": 14,
+      "available": true
+    },
+    {
+      "name": "Rauchbier",
+      "style": "Smoked Märzen",
+      "abv": 5.3,
+      "ibu": 26,
+      "color": "amber",
+      "glass": "0.45",
+      "price": 12,
+      "available": false
+    },
+    {
+      "name": "Imperial Stout",
+      "style": "Russian Imperial Stout",
+      "abv": 10.5,
+      "ibu": 70,
+      "color": "dark",
+      "glass": "0.33",
+      "price": 16,
+      "available": true
+    },
+    {
+      "name": "Kriek",
+      "style": "Cherry Lambic",
+      "abv": 5,
+      "ibu": 10,
+      "color": "fruit",
+      "glass": "0.33",
+      "price": 16,
+      "available": true
+    },
+    {
+      "name": "Mango Sour",
+      "style": "Fruited Sour",
+      "abv": 5.5,
+      "ibu": 10,
+      "color": "fruit",
+      "glass": "0.45",
+      "price": 13,
+      "available": true
+    },
+    {
+      "name": "Gose",
+      "style": "Gose",
+      "abv": 4.3,
+      "ibu": 8,
+      "color": "fruit",
+      "glass": "0.45",
+      "price": 12,
+      "available": true
+    },
+    {
+      "name": "Berliner Weisse",
+      "style": "Raspberry Berliner Weisse",
+      "abv": 3.5,
+      "ibu": 6,
+      "color": "fruit",
+      "glass": "0.45",
+      "price": 12,
+      "available": true
+    },
+    {
+      "name": "Сидр",
+      "style": "Dry Cider",
+      "abv": 5.5,
+      "ibu": 0,
+      "color": "fruit",
+      "glass": "0.45",
+      "price": 11,
+      "available": true
+    }
   ]
 }
