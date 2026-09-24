@@ -6,215 +6,379 @@
   <title>Beer House — меню</title>
   <style>
     :root {
-      --bg: #161411;
-      --card: #231f1a;
+      --bg: #12100d;
       --text: #f3ead8;
-      --muted: #b7aa94;
-      --accent: #d4a017;
-      --danger: #c45c3e;
+      --muted: #9c907c;
+      --accent: #e0a526;
+      --line: rgba(243, 234, 216, 0.1);
+      --danger: #d0664a;
+      /* Базовый размер шрифта меню, подбирается скриптом под экран и число позиций */
+      --fs: 20px;
+      /* Добавка к отступу строк, чтобы список занимал всю высоту экрана */
+      --extra: 0px;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
+      height: 100%;
       margin: 0;
-      min-height: 100vh;
-      font-family: Georgia, "Times New Roman", serif;
-      background: var(--bg);
-      color: var(--text);
+      overflow: hidden;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 32px 16px 48px;
+      padding: 1.6vh 2vw 1.2vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Roboto Condensed", "Arial Narrow", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .top {
+      flex: none;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 2vw;
+      margin-bottom: 1vh;
     }
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0;
+      font-size: 3.2vh;
       font-weight: 400;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
-      font-size: 1.1rem;
+      color: var(--accent);
     }
 
     .status {
-      min-height: 1.4em;
-      margin: 0 0 24px;
-      font-family: system-ui, sans-serif;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .status.error {
+      font-size: 1.6vh;
       color: var(--danger);
     }
 
-    .card {
-      width: min(420px, 100%);
-      background: var(--card);
-      border: 1px solid #3a332b;
-      border-radius: 12px;
-      padding: 28px 24px;
+    .board {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      gap: calc(var(--fs) * 2.2);
+      overflow: hidden;
+      font-size: var(--fs);
+      line-height: 1.2;
     }
 
-    .card.unavailable {
-      opacity: 0.72;
+    .col {
+      flex: 1 1 0;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .row {
+      display: flex;
+      align-items: baseline;
+      gap: calc(var(--fs) * 0.6);
+      padding: calc(var(--fs) * 0.2 + var(--extra)) 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .head {
+      padding-top: 0;
+      color: var(--muted);
+      font-size: calc(var(--fs) * 0.55);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .name {
-      margin: 0 0 6px;
-      font-size: 1.75rem;
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .style {
-      margin: 0 0 20px;
+    .name b {
+      font-weight: 600;
+    }
+
+    .name i {
+      margin-left: 0.5em;
+      font-style: normal;
+      font-size: 0.72em;
+      color: var(--muted);
+    }
+
+    /* Раскладка «стиль под названием»: уже по ширине, выше по высоте */
+    .stack .name b,
+    .stack .name i {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stack .name i {
+      margin-left: 0;
+      line-height: 1.1;
+    }
+
+    .num {
+      flex: none;
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Ширины в единицах --fs, чтобы заголовок с мелким шрифтом совпадал со строками */
+    .abv { width: calc(var(--fs) * 2.8); }
+    .ibu { width: calc(var(--fs) * 1.9); }
+    .vol { width: calc(var(--fs) * 3.3); }
+    .price { width: calc(var(--fs) * 2.6); }
+
+    .row:not(.head) .abv,
+    .row:not(.head) .ibu,
+    .row:not(.head) .vol {
+      color: var(--muted);
+    }
+
+    .row:not(.head) .price {
+      font-weight: 600;
       color: var(--accent);
-      letter-spacing: 0.04em;
     }
 
-    .meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px 16px;
-      margin: 0 0 20px;
-      font-family: system-ui, sans-serif;
-      font-size: 0.95rem;
+    .off {
+      opacity: 0.35;
     }
 
-    .meta dt {
+    .off .price {
+      text-decoration: line-through;
+    }
+
+    .empty {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin: 0;
+      font-size: 3vh;
       color: var(--muted);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
     }
 
-    .meta dd {
-      margin: 4px 0 0;
-    }
-
-    .price {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-
-    .badge {
-      display: inline-block;
-      margin-top: 16px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-family: system-ui, sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      background: #2f4a32;
-      color: #c8e0c4;
-    }
-
-    .card.unavailable .badge {
-      background: #4a2c26;
-      color: #f0c4b8;
-    }
-
-    .placeholder {
-      color: var(--muted);
+    .empty[hidden] {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>Beer House</h1>
-  <p id="status" class="status" aria-live="polite"></p>
+  <header class="top">
+    <h1>Beer House</h1>
+    <span id="status" class="status" aria-live="polite"></span>
+  </header>
 
-  <article id="card" class="card" hidden>
-    <h2 id="name" class="name"></h2>
-    <p id="style" class="style"></p>
-    <dl class="meta">
-      <div>
-        <dt>Крепость</dt>
-        <dd id="abv"></dd>
-      </div>
-      <div>
-        <dt>IBU</dt>
-        <dd id="ibu"></dd>
-      </div>
-      <div>
-        <dt>Объём</dt>
-        <dd id="volume"></dd>
-      </div>
-      <div>
-        <dt>Цена</dt>
-        <dd id="price" class="price"></dd>
-      </div>
-    </dl>
-    <span id="badge" class="badge"></span>
-  </article>
+  <main id="board" class="board"></main>
 
-  <p id="empty" class="placeholder">Загрузка меню…</p>
+  <p id="empty" class="empty">Загрузка меню…</p>
 
   <script>
     // Опрос JSON каждые 45 секунд, без кэша Pages/браузера
     const POLL_MS = 45000;
     const DATA_URL = "data/menu.json";
+    const MIN_FS = 8;
+    const MAX_FS = 160;
+    const MAX_COLS = 6;
 
-    const el = {
-      status: document.getElementById("status"),
-      card: document.getElementById("card"),
-      empty: document.getElementById("empty"),
-      name: document.getElementById("name"),
-      style: document.getElementById("style"),
-      abv: document.getElementById("abv"),
-      ibu: document.getElementById("ibu"),
-      volume: document.getElementById("volume"),
-      price: document.getElementById("price"),
-      badge: document.getElementById("badge"),
-    };
+    const board = document.getElementById("board");
+    const statusEl = document.getElementById("status");
+    const emptyEl = document.getElementById("empty");
 
-    let lastData = null;
+    let items = [];
+    let lastRaw = null;
 
-    function setStatus(text, isError) {
-      el.status.textContent = text;
-      el.status.classList.toggle("error", Boolean(isError));
+    function setStatus(text) {
+      statusEl.textContent = text;
     }
 
-    function render(data) {
-      const available = Boolean(data.available);
+    function formatNumber(value) {
+      if (value === null || value === undefined || value === "") return "";
+      const n = Number(value);
+      return Number.isFinite(n) ? n.toLocaleString("ru-RU", { maximumFractionDigits: 1 }) : String(value);
+    }
 
-      el.name.textContent = data.name;
-      el.style.textContent = data.style;
-      el.abv.textContent = data.abv + " %";
-      el.ibu.textContent = String(data.ibu);
-      el.volume.textContent = data.volume;
-      el.price.textContent = data.price + " ₽";
-      el.badge.textContent = available ? "В наличии" : "Нет в наличии";
-      el.card.classList.toggle("unavailable", !available);
-      el.card.hidden = false;
-      el.empty.hidden = true;
+    // Поддержка старого формата с одной позицией, пока Pages не отдал новый JSON
+    function normalize(data) {
+      if (data && Array.isArray(data.beers)) return data.beers;
+      if (data && typeof data === "object" && "name" in data) return [data];
+      throw new Error("Неверный формат меню");
+    }
+
+    function cell(className, text) {
+      const span = document.createElement("span");
+      span.className = className;
+      span.textContent = text;
+      return span;
+    }
+
+    function headRow() {
+      const row = document.createElement("div");
+      row.className = "row head";
+      row.append(
+        cell("name", ""),
+        cell("num abv", "Алк."),
+        cell("num ibu", "IBU"),
+        cell("num vol", "Объём"),
+        cell("num price", "₽")
+      );
+      return row;
+    }
+
+    function beerRow(beer) {
+      const row = document.createElement("div");
+      row.className = beer.available === false ? "row off" : "row";
+
+      const name = document.createElement("span");
+      name.className = "name";
+      const title = document.createElement("b");
+      title.textContent = beer.name || "";
+      name.append(title);
+      if (beer.style) {
+        const style = document.createElement("i");
+        style.textContent = beer.style;
+        name.append(style);
+      }
+
+      const abv = formatNumber(beer.abv);
+      row.append(
+        name,
+        cell("num abv", abv ? abv + "%" : ""),
+        cell("num ibu", Number(beer.ibu) > 0 ? formatNumber(beer.ibu) : "—"),
+        cell("num vol", beer.volume || ""),
+        cell("num price", formatNumber(beer.price))
+      );
+      return row;
+    }
+
+    function build(cols) {
+      const perCol = Math.ceil(items.length / cols);
+      board.replaceChildren();
+      for (let c = 0; c < cols; c++) {
+        const part = items.slice(c * perCol, (c + 1) * perCol);
+        if (!part.length) break;
+        const col = document.createElement("div");
+        col.className = "col";
+        col.append(headRow(), ...part.map(beerRow));
+        board.append(col);
+      }
+    }
+
+    function fits(fs) {
+      board.style.setProperty("--fs", fs + "px");
+      for (const col of board.children) {
+        if (col.scrollHeight > col.clientHeight + 1) return false;
+      }
+      // Строки целиком (цифры не влезли) и названия/стили (обрезаны многоточием)
+      for (const el of board.querySelectorAll(".row, .row:not(.head) .name, .row:not(.head) .name > *")) {
+        if (el.scrollWidth > el.clientWidth + 1) return false;
+      }
+      return true;
+    }
+
+    function maxFontSize() {
+      let lo = MIN_FS;
+      let hi = MAX_FS;
+      let ok = 0;
+      while (hi - lo > 0.25) {
+        const mid = (lo + hi) / 2;
+        if (fits(mid)) {
+          ok = mid;
+          lo = mid;
+        } else {
+          hi = mid;
+        }
+      }
+      return ok;
+    }
+
+    // Свободную высоту делим между строками, чтобы меню занимало экран целиком
+    function spreadRows(fs) {
+      let perRow = Infinity;
+      for (const col of board.children) {
+        const used = col.lastElementChild.getBoundingClientRect().bottom - col.getBoundingClientRect().top;
+        perRow = Math.min(perRow, (col.clientHeight - used) / col.children.length);
+      }
+      const extra = Math.max(0, Math.min(perRow, fs * 0.8)) / 2;
+      board.style.setProperty("--extra", Math.floor(extra * 10) / 10 + "px");
+    }
+
+    // Перебор раскладки и числа колонок, для каждой — максимальный шрифт, при котором всё помещается
+    function fit() {
+      if (!items.length) return;
+
+      board.style.setProperty("--extra", "0px");
+      let best = null;
+      for (const stack of [false, true]) {
+        board.classList.toggle("stack", stack);
+        let prevPerCol = 0;
+        for (let cols = 1; cols <= Math.min(MAX_COLS, items.length); cols++) {
+          const perCol = Math.ceil(items.length / cols);
+          if (perCol === prevPerCol) continue;
+          prevPerCol = perCol;
+
+          build(cols);
+          const fs = maxFontSize();
+          if (fs && (!best || fs > best.fs)) best = { stack, cols, fs };
+        }
+      }
+
+      // Если не влезло даже минимальным шрифтом, максимум колонок и обрезка названий
+      if (!best) best = { stack: true, cols: Math.min(MAX_COLS, items.length), fs: MIN_FS };
+
+      const fs = Math.floor(best.fs * 4) / 4;
+      board.classList.toggle("stack", best.stack);
+      build(best.cols);
+      board.style.setProperty("--fs", fs + "px");
+      spreadRows(fs);
     }
 
     async function loadMenu() {
       try {
-        const response = await fetch(DATA_URL + "?t=" + Date.now(), {
-          cache: "no-store",
-        });
+        const response = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+        if (!response.ok) throw new Error("HTTP " + response.status);
 
-        if (!response.ok) {
-          throw new Error("HTTP " + response.status);
+        const raw = await response.text();
+        if (raw !== lastRaw) {
+          items = normalize(JSON.parse(raw));
+          lastRaw = raw;
+          emptyEl.hidden = items.length > 0;
+          if (!items.length) emptyEl.textContent = "Меню пока пусто.";
+          fit();
         }
-
-        const data = await response.json();
-        lastData = data;
-        render(data);
-        setStatus("", false);
+        setStatus("");
       } catch (error) {
-        if (lastData) {
-          setStatus("Не удалось обновить меню. Показаны последние данные.", true);
+        if (lastRaw) {
+          setStatus("Не удалось обновить меню");
         } else {
-          el.empty.hidden = false;
-          el.empty.textContent = "Меню временно недоступно.";
-          setStatus("Не удалось загрузить меню.", true);
+          emptyEl.hidden = false;
+          emptyEl.textContent = "Меню временно недоступно.";
         }
       }
+    }
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fit, 150);
+    });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(fit);
     }
 
     loadMenu();

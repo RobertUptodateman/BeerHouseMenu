@@ -20,16 +20,25 @@ collections:
   - name: menu
     label: Меню
     delete: false
+    editor:
+      preview: false
     files:
-      - name: beer
-        label: Позиция пива
+      - name: beers
+        label: Позиции пива
         file: data/menu.json
         format: json
         fields:
-          - { name: name, label: Название, widget: string }
-          - { name: style, label: Стиль, widget: string }
-          - { name: abv, label: "Крепость, %", widget: number, value_type: float, min: 0, step: 0.1 }
-          - { name: ibu, label: IBU, widget: number, value_type: int, min: 0 }
-          - { name: volume, label: Объём, widget: string }
-          - { name: price, label: "Цена, ₽", widget: number, value_type: int, min: 0 }
-          - { name: available, label: В наличии, widget: boolean, default: true }
+          - name: beers
+            label: Позиции
+            label_singular: позицию
+            widget: list
+            collapsed: true
+            summary: "{{fields.name}} · {{fields.style}} · {{fields.price}} ₽"
+            fields:
+              - { name: name, label: Название, widget: string }
+              - { name: style, label: Стиль, widget: string, required: false }
+              - { name: abv, label: "Крепость, %", widget: number, value_type: float, min: 0, step: 0.1 }
+              - { name: ibu, label: IBU, widget: number, value_type: int, min: 0, required: false }
+              - { name: volume, label: Объём, widget: string, default: "0.5 л" }
+              - { name: price, label: "Цена, ₽", widget: number, value_type: int, min: 0 }
+              - { name: available, label: В наличии, widget: boolean, default: true }
