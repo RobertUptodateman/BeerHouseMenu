@@ -2,18 +2,6 @@
   "taps": [
     {
       "color": "light",
-      "price": 12,
-      "available": true,
-      "brewery": "Zedazeni",
-      "name": "West Coast",
-      "style": "American IPA",
-      "abv": 6.8,
-      "type": "beer",
-      "ibu": 65,
-      "glass": "0.45"
-    },
-    {
-      "color": "light",
       "badge": "new",
       "price": 16,
       "available": true,
@@ -24,6 +12,18 @@
       "type": "beer",
       "ibu": 100,
       "glass": "0.33"
+    },
+    {
+      "color": "light",
+      "price": 12,
+      "available": true,
+      "brewery": "Zedazeni",
+      "name": "West Coast",
+      "style": "American IPA",
+      "abv": 6.8,
+      "type": "beer",
+      "ibu": 65,
+      "glass": "0.45"
     },
     {
       "color": "light",
@@ -163,18 +163,6 @@
     },
     {
       "color": "light",
-      "price": 13,
-      "available": true,
-      "brewery": "Dupont",
-      "name": "Saison",
-      "style": "Farmhouse Ale",
-      "abv": 6.5,
-      "type": "beer",
-      "ibu": 28,
-      "glass": "0.45"
-    },
-    {
-      "color": "light",
       "price": 16,
       "available": true,
       "brewery": "Big Village",
@@ -184,6 +172,18 @@
       "type": "beer",
       "ibu": 40,
       "glass": "0.33"
+    },
+    {
+      "color": "light",
+      "price": 13,
+      "available": true,
+      "brewery": "Dupont",
+      "name": "Saison",
+      "style": "Farmhouse Ale",
+      "abv": 6.5,
+      "type": "beer",
+      "ibu": 28,
+      "glass": "0.45"
     },
     {
       "color": "light",
@@ -210,18 +210,6 @@
       "glass": "0.33"
     },
     {
-      "color": "amber",
-      "price": 12,
-      "available": false,
-      "brewery": "Schlenkerla",
-      "name": "Rauchbier",
-      "style": "Smoked Märzen",
-      "abv": 5.3,
-      "type": "beer",
-      "ibu": 26,
-      "glass": "0.45"
-    },
-    {
       "color": "dark",
       "badge": "last",
       "price": 16,
@@ -233,6 +221,18 @@
       "type": "beer",
       "ibu": 70,
       "glass": "0.33"
+    },
+    {
+      "color": "amber",
+      "price": 12,
+      "available": false,
+      "brewery": "Schlenkerla",
+      "name": "Rauchbier",
+      "style": "Smoked Märzen",
+      "abv": 5.3,
+      "type": "beer",
+      "ibu": 26,
+      "glass": "0.45"
     },
     {
       "color": "fruit",
